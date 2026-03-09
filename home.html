@@ -5,24 +5,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Github Issue Tracker</title>
 
-    <!-- tailwind with daisy -->
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
-    <!-- font awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <!-- google fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 
     <style>
-        * {
-             font-family: "Open Sans", sans-serif;
-         }
+        * { font-family: "Open Sans", sans-serif; }
+
+        /* Grid */
+        .issues-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+        @media (max-width: 1024px) { .issues-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 640px)  { .issues-grid { grid-template-columns: 1fr; } }
+
+        /* Card */
+        .issue-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+            cursor: pointer;
+            transition: box-shadow 0.2s;
+        }
+        .issue-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+        .issue-card.high   { border-top: 3px solid #22c55e; }
+        .issue-card.medium { border-top: 3px solid #a855f7; }
+        .issue-card.low    { border-top: 3px solid #e5e7eb; }
+
+        /* Header row */
+        .issue-card-header { display: flex; align-items: center; justify-content: space-between; }
+
+        /* Status icon */
+        .status-icon { font-size: 14px; }
+        .status-icon.open   { color: #22c55e; }
+        .status-icon.closed { color: #a855f7; }
+
+        /* Priority badge */
+        .priority-badge {
+            font-size: 10px; font-weight: 700; text-transform: uppercase;
+            padding: 2px 8px; border-radius: 999px;
+        }
+        .priority-badge.high   { background: #fee2e2; color: #ef4444; }
+        .priority-badge.medium { background: #fef9c3; color: #ca8a04; }
+        .priority-badge.low    { background: #f1f5f9; color: #64748b; }
+
+        /* Title */
+        .issue-title {
+            font-size: 13px; font-weight: 700; color: #111827;
+            line-height: 1.4; text-transform: capitalize; margin: 0;
+        }
+
+        /* Description */
+        .issue-description {
+            font-size: 11px; color: #6b7280; line-height: 1.6; margin: 0;
+            display: -webkit-box; -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical; overflow: hidden;
+        }
+
+        /* Labels */
+        .issue-labels { display: flex; flex-wrap: wrap; gap: 4px; }
+        .issue-label {
+            font-size: 10px; font-weight: 600; padding: 2px 8px;
+            border-radius: 999px; display: inline-flex; align-items: center; gap: 3px;
+        }
+        .label-bug          { background: #fee2e2; color: #ef4444; }
+        .label-enhancement  { background: #d1fae5; color: #059669; }
+        .label-documentation{ background: #e0e7ff; color: #6366f1; }
+        .label-help-wanted  { background: #fef3c7; color: #d97706; }
+        .label-good-first   { background: #d1fae5; color: #059669; }
+        .label-default      { background: #e0e7ff; color: #6366f1; }
+
+        /* Footer */
+        .issue-footer {
+            border-top: 1px solid #f3f4f6; padding-top: 8px;
+            margin-top: auto; display: flex; flex-direction: column; gap: 2px;
+        }
+        .issue-footer span { font-size: 11px; color: #9ca3af; }
+        .issue-footer .author { font-weight: 600; color: #4b5563; }
     </style>
 </head>
 
@@ -31,47 +101,35 @@
     <div>
         <header class="bg-white border-b border-gray-200 sticky top-0 z-30">
             <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
-
                 <div class="flex items-center gap-3 shrink-0">
                     <img src="./assets/github-logo.png" alt="GitHub Logo" class="w-7 h-7 object-contain">
                     <span class="font-bold text-gray-900 text-base">GitHub Issues Tracker</span>
                 </div>
-
                 <div class="flex items-center gap-3 flex-1 justify-end">
-                    <!-- Search bar -->
                     <div class="relative flex-1 max-w-xs">
                         <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
-                        <input
-                            id="searchInput"
-                            type="text"
-                            placeholder="Search issues..."
-                            class="w-full pl-8 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition placeholder-gray-400"
-                        />
+                        <input id="searchInput" type="text" placeholder="Search issues..."
+                            class="w-full pl-8 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition placeholder-gray-400" />
                     </div>
-
-                    <!-- New Issue Button -->
                     <button class="flex items-center gap-2 bg-primary hover:bg-primary-800 text-white text-sm font-semibold px-4 py-2 rounded-lg transition cursor-pointer whitespace-nowrap">
-                        <i class="fa-solid fa-plus text-xs"></i>
-                        New Issue
+                        <i class="fa-solid fa-plus text-xs"></i> New Issue
                     </button>
                 </div>
-
             </div>
         </header>
 
         <main class="max-w-6xl mx-auto px-6 py-8">
 
             <div class="bg-white p-4 flex items-center gap-2 mb-6">
-                <button id="tab-all" class="px-5 py-2 border-1 text-sm font-semibold bg-primary text-white rounded-lg transition cursor-pointer">All</button>
-                <button id="tab-open" class="px-5 py-2 border-1 text-sm font-semibold text-gray-600 hover:bg-gray-100 rounded-lg transition cursor-pointer">Open</button>
+                <button id="tab-all"    class="px-5 py-2 border-1 text-sm font-semibold bg-primary text-white rounded-lg transition cursor-pointer">All</button>
+                <button id="tab-open"   class="px-5 py-2 border-1 text-sm font-semibold text-gray-600 hover:bg-gray-100 rounded-lg transition cursor-pointer">Open</button>
                 <button id="tab-closed" class="px-5 py-2 border-1 text-sm font-semibold text-gray-600 hover:bg-gray-100 rounded-lg transition cursor-pointer">Closed</button>
             </div>
 
-            <!-- Issues Title Bar -->
             <div class="bg-white rounded-xl shadow-sm px-6 py-4 flex items-center justify-between mb-4">
                 <div class="flex items-center gap-3">
                     <span class="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-lg">
-                        <img src="./assets/Aperture.png" alt="">                    
+                        <img src="./assets/Aperture.png" alt="">
                     </span>
                     <div>
                         <p id="issueCount" class="font-bold text-gray-900 text-base">50 Issues</p>
@@ -80,22 +138,19 @@
                 </div>
                 <div class="flex items-center gap-4 text-sm font-medium">
                     <span class="flex items-center gap-1.5 text-gray-600">
-                        <span class="w-2.5 h-2.5 rounded-full bg-green-500 inline-block"></span>
-                        Open
+                        <span class="w-2.5 h-2.5 rounded-full bg-green-500 inline-block"></span> Open
                     </span>
                     <span class="flex items-center gap-1.5 text-gray-600">
-                        <span class="w-2.5 h-2.5 rounded-full bg-purple-500 inline-block"></span>
-                        Closed
+                        <span class="w-2.5 h-2.5 rounded-full bg-purple-500 inline-block"></span> Closed
                     </span>
                 </div>
             </div>
 
-            <!-- Cards-->
             <div id="issuesList"></div>
 
         </main>
     </div>
 
-    <script src="./script/home.js" defer></script>
+    <script src="./script/home.js"></script>
 </body>
 </html>
