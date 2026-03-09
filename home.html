@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Github Issue Tracker</title>
+
+    <!-- tailwind with daisy -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+             font-family: "Open Sans", sans-serif;
+         }
+    </style>
+</head>
+
+<body class="min-h-screen bg-[#f3f4f6]">
+
+    <div>
+        <header class="bg-white border-b border-gray-200 sticky top-0 z-30">
+            <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
+
+                <div class="flex items-center gap-3 shrink-0">
+                    <img src="./assets/github-logo.png" alt="GitHub Logo" class="w-7 h-7 object-contain">
+                    <span class="font-bold text-gray-900 text-base">GitHub Issues Tracker</span>
+                </div>
+
+                <div class="flex items-center gap-3 flex-1 justify-end">
+                    <!-- Search bar -->
+                    <div class="relative flex-1 max-w-xs">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                        <input
+                            type="text"
+                            placeholder="Search issues..."
+                            class="w-full pl-8 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition placeholder-gray-400"
+                        />
+                    </div>
+
+                    <!-- New Issue Button -->
+                    <button class="flex items-center gap-2 bg-primary hover:bg-primary-800 text-white text-sm font-semibold px-4 py-2 rounded-lg transition cursor-pointer whitespace-nowrap">
+                        <i class="fa-solid fa-plus text-xs"></i>
+                        New Issue
+                    </button>
+                </div>
+
+            </div>
+        </header>
+
+        <main class="max-w-6xl mx-auto px-6 py-8">
+
+            <div class="bg-white p-4 flex items-center gap-2 mb-6">
+                <button class="px-5 py-2  border-1 text-sm font-semibold bg-primary text-white rounded-lg transition cursor-pointer">All</button>
+                <button class="px-5 py-2 border-1 text-sm font-semibold text-gray-600 hover:bg-gray-100 rounded-lg transition cursor-pointer">Open</button>
+                <button class="px-5 py-2 border-1 text-sm font-semibold text-gray-600 hover:bg-gray-100 rounded-lg transition cursor-pointer">Closed</button>
+            </div>
+
+            <!-- Issues Title Bar -->
+            <div class="bg-white rounded-xl shadow-sm px-6 py-4 flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                    <span class="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-lg">
+                        <img src="./assets/Aperture.png" alt="">                    
+                    </span>
+                    <div>
+                        <p class="font-bold text-gray-900 text-base">50 Issues</p>
+                        <p class="text-xs text-gray-400">Track and manage your project issues</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 text-sm font-medium">
+                    <span class="flex items-center gap-1.5 text-gray-600">
+                        <span class="w-2.5 h-2.5 rounded-full bg-green-500 inline-block"></span>
+                        Open
+                    </span>
+                    <span class="flex items-center gap-1.5 text-gray-600">
+                        <span class="w-2.5 h-2.5 rounded-full bg-purple-500 inline-block"></span>
+                        Closed
+                    </span>
+                </div>
+            </div>
+
+            <!-- Cards-->
+            <div id="issuesList"></div>
+
+        </main>
+    </div>
+
+    <script src="./script/script.js"></script>
+</body>
+</html>

@@ -46,7 +46,7 @@
         <!-- Username-->
         <div class="mb-5">
             <label class="block text-sm font-semibold text-gray-800 mb-1">Username</label>
-            <input type="text" placeholder="Enter Username"
+            <input id="username" type="text" placeholder="Enter Username"
                 class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition" />
             <p class="text-xs text-primary font-semibold mt-1">Default: admin</p>
         </div>
@@ -54,12 +54,17 @@
         <!-- Password -->
         <div class="mb-7">
             <label class="block text-sm font-semibold text-gray-800 mb-1">Password</label>
-            <input type="password" placeholder="Enter Password"
+            <input id="password" type="password" placeholder="Enter Password"
                 class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition" />
             <p class="text-xs text-primary font-semibold mt-1">Default: admin123</p>
         </div>
 
-        <button
+        <!-- Error Message -->
+        <p id="errorMsg" class="hidden text-xs text-red-500 font-semibold mb-3 text-center">
+           Invalid username or password. Please try again.
+        </p>
+
+        <button id="loginButton"
             class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-3 rounded-lg text-sm transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer">
             Sign In
         </button>
