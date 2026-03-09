@@ -16,19 +16,21 @@ function priorityBadge(p) {
 function labelBadge(label) {
     const l = label.toLowerCase();
     let cls = 'label-default';
-    let icon = '🔵';
-    if (l === 'bug')                   { cls = 'label-bug';         icon = '🔴'; }
-    else if (l === 'enhancement')      { cls = 'label-enhancement'; icon = '🟢'; }
-    else if (l.includes('help'))       { cls = 'label-help-wanted'; icon = '🟡'; }
-    else if (l.includes('good first')) { cls = 'label-good-first';  icon = '🟢'; }
-    else if (l === 'documentation')    { cls = 'label-documentation'; icon = '🔵'; }
+    let icon = '<i class="fa-solid fa-bug"></i>';
+
+if (l === 'bug')                   { cls = 'label-bug';          icon = '<i class="fa-solid fa-bug"></i>'; }
+else if (l === 'enhancement')      { cls = 'label-enhancement';  icon = '<i class="fa-solid fa-wand-magic-sparkles"></i>'; }
+else if (l.includes('help'))       { cls = 'label-help-wanted';  icon = '<i class="fa-regular fa-life-ring"></i>'; }
+else if (l.includes('good first')) { cls = 'label-good-first';   icon = '<i class="fa-solid fa-star"></i>'; }
+else if (l === 'documentation')    { cls = 'label-documentation'; icon = '<i class="fa-solid fa-book"></i>'; }
     return `<span class="issue-label ${cls}">${icon} ${label.toUpperCase()}</span>`;
 }
 
 function statusIcon(s) {
     return s === 'open'
-        ? `<span class="status-icon open"><i class="fa-solid fa-circle-dot"></i></span>`
-        : `<span class="status-icon closed"><i class="fa-solid fa-circle-check"></i></span>`;
+        ? `<span class="status-icon open"><img src="./assets/Open-Status.png" alt=""></span>`
+        : `<span class="status-icon closed">    <img src="./assets/Closed- Status .png" alt="">
+</span>`;
 }
 
 function formatDate(iso) {
@@ -36,7 +38,6 @@ function formatDate(iso) {
     return `${d.getMonth()+1}/${d.getDate()}/${d.getFullYear()}`;
 }
 
-// ── Render ─────────────────────────────────────────────────────────────────
 
 function renderCards(issues) {
     if (issueCount) issueCount.textContent = `${issues.length} Issues`;
@@ -73,20 +74,22 @@ function renderCards(issues) {
         `</div>`;
 }
 
-// ── Filter & Search ────────────────────────────────────────────────────────
 
 function applyFilter(filter) {
     currentFilter = filter;
 
     [tabAll, tabOpen, tabClosed].forEach(btn => {
         if (!btn) return;
-        btn.style.background = '';
+        btn.style.background = '#ffffff';
         btn.style.color = '#4b5563';
+        btn.style.border = '1px solid #e5e7eb';
+
     });
     const activeTab = { all: tabAll, open: tabOpen, closed: tabClosed }[filter];
     if (activeTab) {
         activeTab.style.background = '#4f46e5';
         activeTab.style.color = '#fff';
+
     }
 
     const query = searchInput ? searchInput.value.toLowerCase() : '';
@@ -101,7 +104,6 @@ if (tabOpen)   tabOpen.addEventListener('click',   () => applyFilter('open'));
 if (tabClosed) tabClosed.addEventListener('click', () => applyFilter('closed'));
 if (searchInput) searchInput.addEventListener('input', () => applyFilter(currentFilter));
 
-// ── Fetch ──────────────────────────────────────────────────────────────────
 
 fetch('https://phi-lab-server.vercel.app/api/v1/lab/issues')
     .then(res => res.json())
